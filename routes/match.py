@@ -9,7 +9,7 @@ match = APIRouter()
 
 
 
-@match.get('/match', response_model=list[Match], tags=["match"])
+@match.get('/match', response_model=list, tags=["match"])
 def find_all_match():
     return matchesEntity(conn.local.match.find())
 
