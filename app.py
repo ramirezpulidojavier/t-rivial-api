@@ -20,8 +20,9 @@ You can take a look at both repositories, and know more, here:
         'email': 'ramirezpulidojavier@gmail.com'
     }
 )
-app.include_router(match)
+
 app.include_router(queue)
+app.include_router(match)
 app.include_router(pot)
 
 
