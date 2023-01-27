@@ -14,8 +14,7 @@ pot = APIRouter()
 @pot.post('/pot', response_model=dict, tags=["pot"])
 def create_pot():
 
-    id = conn.local.pot.insert_one(dict({"total": 0})).inserted_id
-    print(id)
-    queue = conn.local.pot.find_one({"_id": id})
+    id = conn.pot.insert_one(dict({"total": 0})).inserted_id
+    queue = conn.pot.find_one({"_id": ObjectId(id)})
 
     return queue

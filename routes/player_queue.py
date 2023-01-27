@@ -18,9 +18,9 @@ def create_queue(queue: Queue):
     new_queue = dict(queue)
     del new_queue["id"]
 
-    id = conn.local.queue.insert_one(new_queue).inserted_id
+    id = conn.queue.insert_one(new_queue).inserted_id
 
-    queue = conn.local.queue.find_one({"_id": id})
+    queue = conn.queue.find_one({"_id": id})
 
     return queueEntity(queue)
 
@@ -41,27 +41,27 @@ def add_couple(couple: Couple):
     
     conn.local.queue.find_one_and_update(
         {"_id": ObjectId("63d3a7e7b613180e171c8702")}, {"$set": dict(queue_db)})
-    return queueEntity(conn.local.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
+    return queueEntity(conn.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
 
 
 @queue.put('/pop_queue', response_model=Queue, tags=["queue"])
 def remove_first_couple():
     
-    queue_db = queueEntity(conn.local.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
+    queue_db = queueEntity(conn.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
     queue_db["queue"].pop(0)
     
-    conn.local.queue.find_one_and_update(
+    conn.queue.find_one_and_update(
         {"_id": ObjectId("63d3a7e7b613180e171c8702")}, {"$set": dict(queue_db)})
-    return queueEntity(conn.local.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
+    return queueEntity(conn.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
 
 @queue.put('/pop_index_queue', response_model=Queue, tags=["queue"])
 def remove_concrete_couple(index: int):
     
-    queue_db = queueEntity(conn.local.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
+    queue_db = queueEntity(conn.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
     if index < len(queue_db["queue"]):
         queue_db["queue"].pop(index)
     
-        conn.local.queue.find_one_and_update(
+        conn.queue.find_one_and_update(
             {"_id": ObjectId("63d3a7e7b613180e171c8702")}, {"$set": dict(queue_db)})
-    return queueEntity(conn.local.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
+    return queueEntity(conn.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
      
