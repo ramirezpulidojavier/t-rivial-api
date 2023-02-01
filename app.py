@@ -3,6 +3,7 @@ from routes.player_queue import queue
 from routes.match import match
 from routes.pot import pot
 from fastapi.responses import Response
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="REST API with FastAPI and Mongodb",
@@ -25,6 +26,15 @@ app.include_router(queue)
 app.include_router(match)
 app.include_router(pot)
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health-check")
 async def health_check():

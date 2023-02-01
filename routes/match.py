@@ -1,16 +1,19 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Response, status, Depends
 from config.db import conn
 from schemas.match import matchEntity, matchesEntity
 from models.match import Match
 from bson import ObjectId
 from starlette.status import HTTP_204_NO_CONTENT
+import auth
+from fastapi.security.api_key import APIKey
+
 
 match = APIRouter()
 
 
 
 @match.get('/match', response_model=list, tags=["match"])
-def find_all_match():
+def find_all_match(api_key: APIKey = Depends(auth.get_api_key)):
     return matchesEntity(conn.match.find())
 
 
