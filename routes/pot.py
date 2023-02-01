@@ -23,7 +23,7 @@ def create_pot():
 @pot.get('/pot', response_model=int, tags=["pot"])
 def create_pot():
 
-    queue = conn.pot.find_one({"_id": ObjectId("63d3d069e3805ee177f2c9b1")})
+    queue = conn.pot.find_one({"_id": ObjectId("63daa2459093060ad7b0c669")})
 
     return queue["total"]
 

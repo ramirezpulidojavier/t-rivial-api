@@ -25,21 +25,20 @@ def create_queue(queue: Queue):
     return queueEntity(queue)
 
 
-@queue.get('/queue', response_model=list, tags=["queue"])
+@queue.get('/queue', response_model=int, tags=["queue"])
 def find_queue():
 
-    queue_db = queueEntity(conn.local.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
-
-    return queue_db["queue"]
-
+    queue_db = conn.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")})
+    print(queue_db)
+    return 0
 
 @queue.put('/queue', response_model=Queue, tags=["queue"])
 def add_couple(couple: Couple):
     
-    queue_db = queueEntity(conn.local.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
+    queue_db = queueEntity(conn.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
     queue_db["queue"].append(dict(couple))
     
-    conn.local.queue.find_one_and_update(
+    conn.queue.find_one_and_update(
         {"_id": ObjectId("63d3a7e7b613180e171c8702")}, {"$set": dict(queue_db)})
     return queueEntity(conn.queue.find_one({"_id": ObjectId("63d3a7e7b613180e171c8702")}))
 
