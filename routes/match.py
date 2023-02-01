@@ -13,12 +13,12 @@ match = APIRouter()
 
 
 @match.get('/match', response_model=list, tags=["match"])
-def find_all_match(api_key: APIKey = Depends(auth.get_api_key)):
+def find_all_match():
     return matchesEntity(conn.match.find())
 
 
 @match.post('/match', response_model=Match, tags=["match"])
-def create_match(match: Match):
+def create_match(match: Match, api_key: APIKey = Depends(auth.get_api_key)):
     new_match = dict(match)
     del new_match["id"]
 
@@ -36,13 +36,13 @@ def find_match(id: str):
 
 
 @match.put('/match/{id}', response_model=Match, tags=["match"])
-def update_match(id: str, match: Match):
+def update_match(id: str, match: Match, api_key: APIKey = Depends(auth.get_api_key)):
     conn.match.find_one_and_update(
         {"_id": ObjectId(id)}, {"$set": dict(match)})
     return matchEntity(conn.match.find_one({"_id": ObjectId(id)}))
 
 
 @ match.delete('/match/{id}', status_code=status.HTTP_204_NO_CONTENT, tags=["match"])
-def delete_match(id: str):
+def delete_match(id: str, api_key: APIKey = Depends(auth.get_api_key)):
     matchEntity(conn.match.find_one_and_delete({"_id": ObjectId(id)}))
     return Response(status_code=HTTP_204_NO_CONTENT)
