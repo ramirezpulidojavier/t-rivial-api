@@ -18,3 +18,12 @@ def create_pot():
     queue = conn.pot.find_one({"_id": ObjectId(id)})
 
     return queue
+
+
+@pot.get('/pot', response_model=int, tags=["pot"])
+def create_pot():
+
+    queue = conn.pot.find_one({"_id": ObjectId("63d3d069e3805ee177f2c9b1")})
+
+    return queue["total"]
+
