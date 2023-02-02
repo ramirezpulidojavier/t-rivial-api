@@ -41,11 +41,11 @@ def calculate_pot():
             pot += 1
 
     new_pot = conn.pot.find_one({"_id": ObjectId("63daa2459093060ad7b0c669")})
-    new_pot["total"] = pot
+    new_pot["total"] = pot + 2
     conn.pot.find_one_and_update(
         {"_id": ObjectId("63daa2459093060ad7b0c669")}, {"$set": new_pot})
 
-    return pot + 2
+    return new_pot["total"]
 
 
 @pot.put('/pot/{amount}', response_model=int, tags=["pot"])
