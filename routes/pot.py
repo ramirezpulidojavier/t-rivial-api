@@ -37,7 +37,7 @@ def calculate_pot():
 
     for match in matches:
         pot += 1
-        if "player2" in match.keys():
+        if "player2" in match.keys() and not match["player2"] is None:
             pot += 1
 
     new_pot = conn.pot.find_one({"_id": ObjectId("63daa2459093060ad7b0c669")})
