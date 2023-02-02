@@ -21,13 +21,32 @@ pot = APIRouter()
 
 #     return queue
 
-
-@pot.get('/pot', response_model=int, tags=["pot"])
-def create_pot():
+@pot.get('/pot_from_database', response_model=int, tags=["pot"])
+def get_pot():
 
     pot = conn.pot.find_one({"_id": ObjectId("63daa2459093060ad7b0c669")})
 
     return pot["total"]
+
+
+@pot.get('/pot', response_model=int, tags=["pot"])
+def calculate_pot():
+
+    matches = conn.match.find()
+    pot = 0
+
+    for match in matches:
+        pot += 1
+        if "player2" in match.keys():
+            pot += 1
+
+    new_pot = conn.pot.find_one({"_id": ObjectId("63daa2459093060ad7b0c669")})
+    new_pot["total"] = pot
+    conn.pot.find_one_and_update(
+        {"_id": ObjectId("63daa2459093060ad7b0c669")}, {"$set": new_pot})
+
+    return pot
+
 
 @pot.put('/pot/{amount}', response_model=int, tags=["pot"])
 def create_pot(amount: int, api_key: APIKey = Depends(auth.get_api_key)):
@@ -36,8 +55,7 @@ def create_pot(amount: int, api_key: APIKey = Depends(auth.get_api_key)):
     new_pot["total"] = amount
     conn.pot.find_one_and_update(
         {"_id": ObjectId("63daa2459093060ad7b0c669")}, {"$set": new_pot})
-    
+
     pot = conn.pot.find_one({"_id": ObjectId("63daa2459093060ad7b0c669")})
 
     return pot["total"]
-

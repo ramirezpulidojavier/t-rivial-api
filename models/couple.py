@@ -3,4 +3,4 @@ from pydantic import BaseModel
   
 class Couple(BaseModel):
     player1: str
-    player2: str
+    player2: Optional[str]
