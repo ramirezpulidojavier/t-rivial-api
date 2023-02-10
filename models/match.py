@@ -8,3 +8,4 @@ class Match(BaseModel):
     player2: Optional[str]
     result: str
     date: datetime
+    pot: Optional[int]

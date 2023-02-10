@@ -21,6 +21,11 @@ def find_all_match():
 def create_match(match: Match, api_key: APIKey = Depends(auth.get_api_key)):
     new_match = dict(match)
     del new_match["id"]
+    
+    new_pot = conn.pot.find_one({"_id": ObjectId("63daa2459093060ad7b0c669")})
+    new_pot["total"] += new_match["pot"]
+    conn.pot.find_one_and_update(
+        {"_id": ObjectId("63daa2459093060ad7b0c669")}, {"$set": new_pot})
 
     id = conn.match.insert_one(new_match).inserted_id
 
